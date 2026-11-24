@@ -1,0 +1,162 @@
+import { X } from 'lucide-react';
+import React, { useEffect } from 'react';
+
+interface ModalProps {
+  open: boolean;
+  onClose: () => void;
+  title: string;
+  subtitle?: string;
+  children: React.ReactNode;
+  footer?: React.ReactNode;
+  maxWidthClass?: string;
+}
+
+export function Modal({
+  open,
+  onClose,
+  title,
+  subtitle,
+  children,
+  footer,
+  maxWidthClass = 'max-w-xl',
+}: ModalProps) {
+  useEffect(() => {
+    if (!open) return;
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKey);
+    return () => window.removeEventListener('keydown', handleKey);
+  }, [open, onClose]);
+
+  if (!open) return null;
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 dark:bg-black/70 backdrop-blur-xs"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-title"
+    >
+      <div
+        className={`w-full ${maxWidthClass} bg-white dark:bg-[#0D1424] border border-slate-200 dark:border-slate-700/80 rounded-lg shadow-2xl overflow-hidden flex flex-col max-h-[88vh]`}
+      >
+        <div className="flex items-start justify-between gap-4 px-5 py-4 border-b border-slate-200 dark:border-slate-800">
+          <div>
+            <h2 id="modal-title" className="font-display text-base font-semibold text-slate-900 dark:text-slate-100">
+              {title}
+            </h2>
+            {subtitle && <p className="text-xs text-slate-600 dark:text-slate-400 mt-0.5">{subtitle}</p>}
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            className="p-1.5 rounded text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+            aria-label="Close modal"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+
+        <div className="p-5 overflow-y-auto text-sm text-slate-700 dark:text-slate-300">{children}</div>
+
+        {footer && (
+          <div className="px-5 py-3.5 border-t border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-[#090F1C] flex items-center justify-end gap-2.5">
+            {footer}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+interface DrawerProps {
+  open: boolean;
+  onClose: () => void;
+  title: string;
+  subtitle?: string;
+  children: React.ReactNode;
+}
+
+export function Drawer({ open, onClose, title, subtitle, children }: DrawerProps) {
+  useEffect(() => {
+    if (!open) return;
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKey);
+    return () => window.removeEventListener('keydown', handleKey);
+  }, [open, onClose]);
+
+  if (!open) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex justify-end bg-slate-950/50 dark:bg-black/65 backdrop-blur-xs" role="dialog" aria-modal="true">
+      <div className="w-full max-w-lg bg-white dark:bg-[#0D1424] border-l border-slate-200 dark:border-slate-800 h-full flex flex-col shadow-2xl">
+        <div className="flex items-start justify-between gap-4 px-5 py-4 border-b border-slate-200 dark:border-slate-800">
+          <div>
+            <h2 className="font-display text-base font-semibold text-slate-900 dark:text-slate-100">{title}</h2>
+            {subtitle && <p className="text-xs text-slate-600 dark:text-slate-400 mt-0.5">{subtitle}</p>}
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            className="p-1.5 rounded text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+            aria-label="Close panel"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+        <div className="p-5 overflow-y-auto flex-1 text-sm text-slate-700 dark:text-slate-300">{children}</div>
+      </div>
+    </div>
+  );
+}
+
+export function ConfirmDialog({
+  open,
+  onClose,
+  onConfirm,
+  title,
+  message,
+  confirmLabel = 'Confirm',
+}: {
+  open: boolean;
+  onClose: () => void;
+  onConfirm: () => void;
+  title: string;
+  message: string;
+  confirmLabel?: string;
+}) {
+  return (
+    <Modal
+      open={open}
+      onClose={onClose}
+      title={title}
+      maxWidthClass="max-w-md"
+      footer={
+        <>
+          <button
+            type="button"
+            onClick={onClose}
+            className="px-3.5 py-2 text-xs font-medium text-slate-700 dark:text-slate-300 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 rounded transition-colors cursor-pointer"
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              onConfirm();
+              onClose();
+            }}
+            className="px-3.5 py-2 text-xs font-medium text-white dark:text-slate-950 bg-emerald-600 dark:bg-[#4ADE80] hover:bg-emerald-700 dark:hover:bg-[#22C55E] rounded transition-colors cursor-pointer"
+          >
+            {confirmLabel}
+          </button>
+        </>
+      }
+    >
+      <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">{message}</p>
+    </Modal>
+  );
+}

@@ -1,0 +1,6 @@
+{
+  "name": "JENGA TAIFA AI PROGRAM",
+  "description": "Internal operational management platform for the JENGA TAIFA AI FOR WORK & BUSINESS national community digital empowerment and SACCO-linked enterprise program in Uganda.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

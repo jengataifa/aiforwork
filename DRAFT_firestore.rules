@@ -1,0 +1,514 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Global Safety Net: Default Deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isVerifiedUser() {
+      return isSignedIn() && request.auth.token.email_verified == true;
+    }
+
+    function isBootstrappedAdmin() {
+      return isVerifiedUser() &&
+        request.auth.token.email == 'jengataifa676@gmail.com';
+    }
+
+    function isAdmin() {
+      return isBootstrappedAdmin() ||
+        (isVerifiedUser() && exists(/databases/$(database)/documents/admins/$(request.auth.uid)));
+    }
+
+    function isOwner(userId) {
+      return isVerifiedUser() && request.auth.uid == userId;
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isValidId(id) {
+      return id is string &&
+        id.size() >= 1 &&
+        id.size() <= 128 &&
+        id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function isValidRegion(regionId) {
+      return regionId in ['central', 'eastern', 'northern', 'western'];
+    }
+
+    function isValidRoleId(roleId) {
+      return roleId in [
+        'national_admin',
+        'program_director',
+        'program_officer',
+        'regional_coordinator',
+        'district_coordinator',
+        'sacco_admin',
+        'trainer',
+        'finance_officer',
+        'enterprise_officer',
+        'me_officer',
+        'beneficiary',
+        'enterprise_manager',
+        'partner_donor'
+      ];
+    }
+
+    function isValidUserPublic(data, userId) {
+      return data.keys().hasAll(['uid', 'displayName', 'roleId', 'createdAt', 'updatedAt']) &&
+        data.keys().hasOnly([
+          'uid',
+          'displayName',
+          'roleId',
+          'stakeholderCategory',
+          'regionId',
+          'district',
+          'saccoId',
+          'preferredTheme',
+          'onboardingCompleted',
+          'createdAt',
+          'updatedAt'
+        ]) &&
+        data.uid is string && data.uid == userId && isValidId(data.uid) &&
+        data.displayName is string && data.displayName.size() >= 1 && data.displayName.size() <= 120 &&
+        data.roleId is string && isValidRoleId(data.roleId) &&
+        (!('stakeholderCategory' in data) || data.stakeholderCategory in [
+          'Youth / Student',
+          'Veteran / Family Member',
+          'SACCO Member / Leader',
+          'Entrepreneur',
+          'Trainer / Coordinator',
+          'Partner / Investor'
+        ]) &&
+        (!('regionId' in data) || isValidRegion(data.regionId)) &&
+        (!('district' in data) || (data.district is string && data.district.size() <= 100)) &&
+        (!('saccoId' in data) || (data.saccoId is string && data.saccoId.size() <= 128)) &&
+        (!('preferredTheme' in data) || data.preferredTheme in ['light', 'dark']) &&
+        (!('onboardingCompleted' in data) || data.onboardingCompleted is bool) &&
+        data.createdAt is timestamp &&
+        data.updatedAt is timestamp;
+    }
+
+    function isValidUserPrivate(data, userId) {
+      return data.keys().hasAll(['uid', 'email', 'updatedAt']) &&
+        data.keys().hasOnly(['uid', 'email', 'phone', 'updatedAt']) &&
+        data.uid is string && data.uid == userId && isValidId(data.uid) &&
+        data.email is string && data.email.size() >= 3 && data.email.size() <= 254 &&
+        (!('phone' in data) || (data.phone is string && data.phone.size() <= 32)) &&
+        data.updatedAt is timestamp;
+    }
+
+    function isValidCourseProgress(data, userId) {
+      return data.keys().hasAll(['uid', 'dayNumber', 'completed', 'practicalNote', 'updatedAt']) &&
+        data.keys().hasOnly(['uid', 'dayNumber', 'completed', 'practicalNote', 'updatedAt']) &&
+        data.uid is string && data.uid == userId && isValidId(data.uid) &&
+        data.dayNumber is number && data.dayNumber >= 1 && data.dayNumber <= 10 &&
+        data.completed is bool &&
+        data.practicalNote is string && data.practicalNote.size() <= 1500 &&
+        data.updatedAt is timestamp;
+    }
+
+    function isValidCertificate(data, userId) {
+      return data.keys().hasAll(['uid', 'fullNameUpper', 'courseTitle', 'scorePct', 'certificateCode', 'issuedAt']) &&
+        data.keys().hasOnly(['uid', 'fullNameUpper', 'courseTitle', 'scorePct', 'certificateCode', 'issuedAt']) &&
+        data.uid is string && data.uid == userId && isValidId(data.uid) &&
+        data.fullNameUpper is string && data.fullNameUpper.size() >= 4 && data.fullNameUpper.size() <= 120 &&
+        data.courseTitle is string && data.courseTitle.size() >= 3 && data.courseTitle.size() <= 150 &&
+        data.scorePct is number && data.scorePct >= 75 && data.scorePct <= 100 &&
+        data.certificateCode is string && data.certificateCode.size() >= 6 && data.certificateCode.size() <= 64 &&
+        data.issuedAt is timestamp;
+    }
+
+    function isValidApplication(data) {
+      return data.keys().hasAll([
+          'ownerUid',
+          'fullName',
+          'category',
+          'saccoId',
+          'saccoName',
+          'district',
+          'regionId',
+          'gender',
+          'hasSmartphone',
+          'businessInterest',
+          'status',
+          'createdAt',
+          'updatedAt'
+        ]) &&
+        data.keys().hasOnly([
+          'ownerUid',
+          'fullName',
+          'category',
+          'saccoId',
+          'saccoName',
+          'district',
+          'regionId',
+          'gender',
+          'hasSmartphone',
+          'businessInterest',
+          'status',
+          'createdAt',
+          'updatedAt'
+        ]) &&
+        data.ownerUid is string && isValidId(data.ownerUid) &&
+        data.fullName is string && data.fullName.size() >= 2 && data.fullName.size() <= 120 &&
+        data.category in [
+          'Youth',
+          'Student / School-Going',
+          'Veteran / Historical Freedom Fighter',
+          'Dependant of Veteran / SACCO Member',
+          'SACCO Member',
+          'Aspiring Entrepreneur',
+          'Community Member'
+        ] &&
+        data.saccoId is string && isValidId(data.saccoId) &&
+        data.saccoName is string && data.saccoName.size() >= 2 && data.saccoName.size() <= 200 &&
+        data.district is string && data.district.size() >= 2 && data.district.size() <= 100 &&
+        data.regionId is string && isValidRegion(data.regionId) &&
+        data.gender in ['Female', 'Male', 'Prefer not to say'] &&
+        data.hasSmartphone is bool &&
+        data.businessInterest is string && data.businessInterest.size() >= 2 && data.businessInterest.size() <= 500 &&
+        data.status in ['Submitted', 'Under Review', 'Approved', 'Assigned to Cohort', 'Waitlisted', 'Rejected'] &&
+        data.createdAt is timestamp &&
+        data.updatedAt is timestamp;
+    }
+
+    function isValidAdmissionsConfig(data) {
+      return data.keys().hasAll(['admissionsOpen', 'activeCohortId', 'updatedAt']) &&
+        data.keys().hasOnly(['admissionsOpen', 'activeCohortId', 'updatedAt']) &&
+        data.admissionsOpen is bool &&
+        data.activeCohortId is string && data.activeCohortId.size() >= 2 && data.activeCohortId.size() <= 80 &&
+        data.updatedAt is timestamp;
+    }
+
+    function isValidInvestment(data) {
+      return data.keys().hasAll([
+          'ownerUid',
+          'investorName',
+          'packageName',
+          'amountUgx',
+          'annualRatePct',
+          'startDateIso',
+          'paymentMethod',
+          'referenceCode',
+          'status',
+          'createdAt',
+          'updatedAt'
+        ]) &&
+        data.keys().hasOnly([
+          'ownerUid',
+          'investorName',
+          'packageName',
+          'amountUgx',
+          'annualRatePct',
+          'startDateIso',
+          'paymentMethod',
+          'referenceCode',
+          'status',
+          'createdAt',
+          'updatedAt'
+        ]) &&
+        data.ownerUid is string && isValidId(data.ownerUid) &&
+        data.investorName is string && data.investorName.size() >= 2 && data.investorName.size() <= 120 &&
+        data.packageName is string && data.packageName.size() >= 2 && data.packageName.size() <= 120 &&
+        data.amountUgx is number && data.amountUgx >= 100000 &&
+        data.annualRatePct is number && data.annualRatePct == 11 &&
+        data.startDateIso is string && data.startDateIso.size() >= 8 && data.startDateIso.size() <= 32 &&
+        data.paymentMethod in ['Equity Bank Uganda', 'MTN Mobile Money', 'Airtel Money'] &&
+        data.referenceCode is string && data.referenceCode.size() >= 4 && data.referenceCode.size() <= 64 &&
+        data.status in ['Pending Verification', 'Active Accruing', 'Completed'] &&
+        data.createdAt is timestamp &&
+        data.updatedAt is timestamp;
+    }
+
+    function isValidDonation(data) {
+      return data.keys().hasAll([
+          'ownerUid',
+          'donorName',
+          'causeTitle',
+          'amountUgx',
+          'paymentMethod',
+          'referenceCode',
+          'status',
+          'createdAt',
+          'updatedAt'
+        ]) &&
+        data.keys().hasOnly([
+          'ownerUid',
+          'donorName',
+          'causeTitle',
+          'amountUgx',
+          'paymentMethod',
+          'referenceCode',
+          'status',
+          'createdAt',
+          'updatedAt'
+        ]) &&
+        data.ownerUid is string && isValidId(data.ownerUid) &&
+        data.donorName is string && data.donorName.size() >= 2 && data.donorName.size() <= 120 &&
+        data.causeTitle is string && data.causeTitle.size() >= 2 && data.causeTitle.size() <= 160 &&
+        data.amountUgx is number && data.amountUgx >= 1000 &&
+        data.paymentMethod in ['Equity Bank Uganda', 'MTN Mobile Money', 'Airtel Money'] &&
+        data.referenceCode is string && data.referenceCode.size() >= 4 && data.referenceCode.size() <= 64 &&
+        data.status in ['Pending Transfer', 'Verified Received'] &&
+        data.createdAt is timestamp &&
+        data.updatedAt is timestamp;
+    }
+
+    function isValidAdminGrant(data, adminId) {
+      return data.keys().hasAll(['uid', 'grantedAt']) &&
+        data.keys().hasOnly(['uid', 'grantedAt']) &&
+        data.uid is string && data.uid == adminId && isValidId(data.uid) &&
+        data.grantedAt is timestamp;
+    }
+
+    function isValidAuditLog(data) {
+      return data.keys().hasAll(['actorUid', 'action', 'targetPath', 'createdAt']) &&
+        data.keys().hasOnly(['actorUid', 'action', 'targetPath', 'createdAt']) &&
+        data.actorUid is string && data.actorUid == request.auth.uid && data.actorUid.size() <= 128 &&
+        data.action is string && data.action.size() >= 2 && data.action.size() <= 100 &&
+        data.targetPath is string && data.targetPath.size() >= 1 && data.targetPath.size() <= 256 &&
+        data.createdAt is timestamp;
+    }
+
+    match /users/{userId} {
+      allow get: if isValidId(userId) && (isOwner(userId) || isAdmin());
+      allow list: if isBootstrappedAdmin() || (isVerifiedUser() && resource.data.uid == request.auth.uid);
+
+      allow create: if isValidId(userId) &&
+        isVerifiedUser() &&
+        isValidUserPublic(incoming(), userId) &&
+        incoming().createdAt == request.time &&
+        incoming().updatedAt == request.time &&
+        (
+          isAdmin() ||
+          (isOwner(userId) && incoming().roleId == 'beneficiary')
+        );
+
+      allow update: if isValidId(userId) &&
+        isVerifiedUser() &&
+        isValidUserPublic(incoming(), userId) &&
+        incoming().uid == existing().uid &&
+        incoming().createdAt == existing().createdAt &&
+        incoming().updatedAt == request.time &&
+        (
+          isAdmin() ||
+          (
+            isOwner(userId) &&
+            incoming().roleId == existing().roleId &&
+            incoming().diff(existing()).affectedKeys().hasOnly([
+              'displayName',
+              'stakeholderCategory',
+              'regionId',
+              'district',
+              'saccoId',
+              'preferredTheme',
+              'onboardingCompleted',
+              'updatedAt'
+            ])
+          )
+        );
+
+      allow delete: if isValidId(userId) && isAdmin();
+
+      match /private/{docId} {
+        allow get: if isValidId(userId) && isValidId(docId) && (isOwner(userId) || isAdmin());
+        allow list: if isBootstrappedAdmin() || (isVerifiedUser() && resource.data.uid == request.auth.uid);
+
+        allow create: if isValidId(userId) &&
+          isValidId(docId) &&
+          (isOwner(userId) || isAdmin()) &&
+          isValidUserPrivate(incoming(), userId) &&
+          incoming().updatedAt == request.time;
+
+        allow update: if isValidId(userId) &&
+          isValidId(docId) &&
+          (isOwner(userId) || isAdmin()) &&
+          isValidUserPrivate(incoming(), userId) &&
+          incoming().uid == existing().uid &&
+          incoming().updatedAt == request.time &&
+          incoming().diff(existing()).affectedKeys().hasOnly(['email', 'phone', 'updatedAt']);
+
+        allow delete: if isValidId(userId) && isValidId(docId) && isAdmin();
+      }
+
+      match /courseProgress/{dayId} {
+        allow get: if isValidId(userId) && isValidId(dayId) && (isOwner(userId) || isAdmin());
+        allow list: if isBootstrappedAdmin() || (isVerifiedUser() && resource.data.uid == request.auth.uid);
+
+        allow create: if isValidId(userId) &&
+          isValidId(dayId) &&
+          (isOwner(userId) || isAdmin()) &&
+          isValidCourseProgress(incoming(), userId) &&
+          incoming().updatedAt == request.time;
+
+        allow update: if isValidId(userId) &&
+          isValidId(dayId) &&
+          (isOwner(userId) || isAdmin()) &&
+          isValidCourseProgress(incoming(), userId) &&
+          incoming().uid == existing().uid &&
+          incoming().dayNumber == existing().dayNumber &&
+          incoming().updatedAt == request.time &&
+          incoming().diff(existing()).affectedKeys().hasOnly(['completed', 'practicalNote', 'updatedAt']);
+
+        allow delete: if isValidId(userId) && isValidId(dayId) && isAdmin();
+      }
+
+      match /certificates/{certId} {
+        allow get: if isValidId(userId) && isValidId(certId) && (isOwner(userId) || isAdmin());
+        allow list: if isBootstrappedAdmin() || (isVerifiedUser() && resource.data.uid == request.auth.uid);
+
+        allow create: if isValidId(userId) &&
+          isValidId(certId) &&
+          (isOwner(userId) || isAdmin()) &&
+          isValidCertificate(incoming(), userId) &&
+          incoming().issuedAt == request.time;
+
+        allow update, delete: if isValidId(userId) && isValidId(certId) && isAdmin();
+      }
+    }
+
+    match /applications/{applicationId} {
+      allow get: if isValidId(applicationId) &&
+        isVerifiedUser() &&
+        (existing().ownerUid == request.auth.uid || isAdmin());
+
+      allow list: if isBootstrappedAdmin() ||
+        (isVerifiedUser() && resource.data.ownerUid == request.auth.uid);
+
+      allow create: if isValidId(applicationId) &&
+        isVerifiedUser() &&
+        isValidApplication(incoming()) &&
+        incoming().ownerUid == request.auth.uid &&
+        incoming().status == 'Submitted' &&
+        incoming().createdAt == request.time &&
+        incoming().updatedAt == request.time;
+
+      allow update: if isValidId(applicationId) &&
+        isVerifiedUser() &&
+        isValidApplication(incoming()) &&
+        incoming().ownerUid == existing().ownerUid &&
+        incoming().createdAt == existing().createdAt &&
+        incoming().updatedAt == request.time &&
+        (
+          isAdmin() ||
+          (
+            existing().ownerUid == request.auth.uid &&
+            existing().status == 'Submitted' &&
+            incoming().status == 'Submitted' &&
+            incoming().diff(existing()).affectedKeys().hasOnly([
+              'fullName',
+              'saccoId',
+              'saccoName',
+              'district',
+              'regionId',
+              'hasSmartphone',
+              'businessInterest',
+              'updatedAt'
+            ])
+          )
+        );
+
+      allow delete: if isValidId(applicationId) && isAdmin();
+    }
+
+    match /programSettings/{settingId} {
+      allow get: if settingId == 'admissions';
+      allow list: if isAdmin();
+      allow create: if settingId == 'admissions' &&
+        isAdmin() &&
+        isValidAdmissionsConfig(incoming()) &&
+        incoming().updatedAt == request.time;
+      allow update: if settingId == 'admissions' &&
+        isAdmin() &&
+        isValidAdmissionsConfig(incoming()) &&
+        incoming().updatedAt == request.time;
+      allow delete: if false;
+    }
+
+    match /investments/{investmentId} {
+      allow get: if isValidId(investmentId) &&
+        isVerifiedUser() &&
+        (existing().ownerUid == request.auth.uid || isAdmin());
+
+      allow list: if isBootstrappedAdmin() ||
+        (isVerifiedUser() && resource.data.ownerUid == request.auth.uid);
+
+      allow create: if isValidId(investmentId) &&
+        isVerifiedUser() &&
+        isValidInvestment(incoming()) &&
+        incoming().ownerUid == request.auth.uid &&
+        incoming().status == 'Pending Verification' &&
+        incoming().createdAt == request.time &&
+        incoming().updatedAt == request.time;
+
+      allow update: if isValidId(investmentId) &&
+        isAdmin() &&
+        isValidInvestment(incoming()) &&
+        incoming().ownerUid == existing().ownerUid &&
+        incoming().createdAt == existing().createdAt &&
+        incoming().updatedAt == request.time;
+
+      allow delete: if isValidId(investmentId) && isAdmin();
+    }
+
+    match /donations/{donationId} {
+      allow get: if isValidId(donationId) &&
+        isVerifiedUser() &&
+        (existing().ownerUid == request.auth.uid || isAdmin());
+
+      allow list: if isBootstrappedAdmin() ||
+        (isVerifiedUser() && resource.data.ownerUid == request.auth.uid);
+
+      allow create: if isValidId(donationId) &&
+        isVerifiedUser() &&
+        isValidDonation(incoming()) &&
+        incoming().ownerUid == request.auth.uid &&
+        incoming().status == 'Pending Transfer' &&
+        incoming().createdAt == request.time &&
+        incoming().updatedAt == request.time;
+
+      allow update: if isValidId(donationId) &&
+        isAdmin() &&
+        isValidDonation(incoming()) &&
+        incoming().ownerUid == existing().ownerUid &&
+        incoming().createdAt == existing().createdAt &&
+        incoming().updatedAt == request.time;
+
+      allow delete: if isValidId(donationId) && isAdmin();
+    }
+
+    match /admins/{adminId} {
+      allow get: if isValidId(adminId) && (isOwner(adminId) || isAdmin());
+      allow list: if isBootstrappedAdmin();
+      allow create: if isValidId(adminId) &&
+        isBootstrappedAdmin() &&
+        isValidAdminGrant(incoming(), adminId) &&
+        incoming().grantedAt == request.time;
+      allow update: if false;
+      allow delete: if isValidId(adminId) && isBootstrappedAdmin();
+    }
+
+    match /auditLogs/{logId} {
+      allow get: if isValidId(logId) && isAdmin();
+      allow list: if isBootstrappedAdmin();
+      allow create: if isValidId(logId) &&
+        isVerifiedUser() &&
+        isValidAuditLog(incoming()) &&
+        incoming().createdAt == request.time;
+      allow update, delete: if false;
+    }
+  }
+}

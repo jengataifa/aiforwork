@@ -1,0 +1,580 @@
+{
+  "entities": {
+    "UserPublic": {
+      "title": "UserPublic",
+      "description": "Operational user profile, onboarding preferences, and program assignment.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "displayName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "roleId": {
+          "type": "string",
+          "enum": [
+            "national_admin",
+            "program_director",
+            "program_officer",
+            "regional_coordinator",
+            "district_coordinator",
+            "sacco_admin",
+            "trainer",
+            "finance_officer",
+            "enterprise_officer",
+            "me_officer",
+            "beneficiary",
+            "enterprise_manager",
+            "partner_donor"
+          ]
+        },
+        "stakeholderCategory": {
+          "type": "string",
+          "enum": [
+            "Youth / Student",
+            "Veteran / Family Member",
+            "SACCO Member / Leader",
+            "Entrepreneur",
+            "Trainer / Coordinator",
+            "Partner / Investor"
+          ]
+        },
+        "regionId": {
+          "type": "string",
+          "enum": ["central", "eastern", "northern", "western"]
+        },
+        "district": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "saccoId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "preferredTheme": {
+          "type": "string",
+          "enum": ["light", "dark"]
+        },
+        "onboardingCompleted": {
+          "type": "boolean"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["uid", "displayName", "roleId", "createdAt", "updatedAt"]
+    },
+    "UserPrivateInfo": {
+      "title": "UserPrivateInfo",
+      "description": "Isolated PII document storing contact email and phone strictly accessible to the owner or national admin.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "maxLength": 254
+        },
+        "phone": {
+          "type": "string",
+          "maxLength": 32
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["uid", "email", "updatedAt"]
+    },
+    "CourseDayProgress": {
+      "title": "CourseDayProgress",
+      "description": "Participant online completion record and practical assignment note for Day 1 to Day 10.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "dayNumber": {
+          "type": "number"
+        },
+        "completed": {
+          "type": "boolean"
+        },
+        "practicalNote": {
+          "type": "string",
+          "maxLength": 1500
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["uid", "dayNumber", "completed", "practicalNote", "updatedAt"]
+    },
+    "CourseCertificate": {
+      "title": "CourseCertificate",
+      "description": "Official A4 digital certificate issued upon passing the AI FOR WORK & BUSINESS final exam.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "fullNameUpper": {
+          "type": "string",
+          "minLength": 4,
+          "maxLength": 120
+        },
+        "courseTitle": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 150
+        },
+        "scorePct": {
+          "type": "number"
+        },
+        "certificateCode": {
+          "type": "string",
+          "minLength": 6,
+          "maxLength": 64
+        },
+        "issuedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["uid", "fullNameUpper", "courseTitle", "scorePct", "certificateCode", "issuedAt"]
+    },
+    "ProgramApplication": {
+      "title": "ProgramApplication",
+      "description": "Real participant application and cohort intake registration record.",
+      "type": "object",
+      "properties": {
+        "ownerUid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "fullName": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 120
+        },
+        "category": {
+          "type": "string",
+          "enum": [
+            "Youth",
+            "Student / School-Going",
+            "Veteran / Historical Freedom Fighter",
+            "Dependant of Veteran / SACCO Member",
+            "SACCO Member",
+            "Aspiring Entrepreneur",
+            "Community Member"
+          ]
+        },
+        "saccoId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "saccoName": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 200
+        },
+        "district": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 100
+        },
+        "regionId": {
+          "type": "string",
+          "enum": ["central", "eastern", "northern", "western"]
+        },
+        "gender": {
+          "type": "string",
+          "enum": ["Female", "Male", "Prefer not to say"]
+        },
+        "hasSmartphone": {
+          "type": "boolean"
+        },
+        "businessInterest": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 500
+        },
+        "status": {
+          "type": "string",
+          "enum": ["Submitted", "Under Review", "Approved", "Assigned to Cohort", "Waitlisted", "Rejected"]
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "ownerUid",
+        "fullName",
+        "category",
+        "saccoId",
+        "saccoName",
+        "district",
+        "regionId",
+        "gender",
+        "hasSmartphone",
+        "businessInterest",
+        "status",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "AdmissionsConfig": {
+      "title": "AdmissionsConfig",
+      "description": "Admin-controlled admissions open/closed toggle and active cohort identifier.",
+      "type": "object",
+      "properties": {
+        "admissionsOpen": {
+          "type": "boolean"
+        },
+        "activeCohortId": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 80
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["admissionsOpen", "activeCohortId", "updatedAt"]
+    },
+    "InvestmentCommitment": {
+      "title": "InvestmentCommitment",
+      "description": "Investor 11% APY investment contract and deposit record.",
+      "type": "object",
+      "properties": {
+        "ownerUid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "investorName": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 120
+        },
+        "packageName": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 120
+        },
+        "amountUgx": {
+          "type": "number"
+        },
+        "annualRatePct": {
+          "type": "number"
+        },
+        "startDateIso": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 32
+        },
+        "paymentMethod": {
+          "type": "string",
+          "enum": ["Equity Bank Uganda", "MTN Mobile Money", "Airtel Money"]
+        },
+        "referenceCode": {
+          "type": "string",
+          "minLength": 4,
+          "maxLength": 64
+        },
+        "status": {
+          "type": "string",
+          "enum": ["Pending Verification", "Active Accruing", "Completed"]
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "ownerUid",
+        "investorName",
+        "packageName",
+        "amountUgx",
+        "annualRatePct",
+        "startDateIso",
+        "paymentMethod",
+        "referenceCode",
+        "status",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "DonationRecord": {
+      "title": "DonationRecord",
+      "description": "Community and partner donation checkout pledge record.",
+      "type": "object",
+      "properties": {
+        "ownerUid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "donorName": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 120
+        },
+        "causeTitle": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 160
+        },
+        "amountUgx": {
+          "type": "number"
+        },
+        "paymentMethod": {
+          "type": "string",
+          "enum": ["Equity Bank Uganda", "MTN Mobile Money", "Airtel Money"]
+        },
+        "referenceCode": {
+          "type": "string",
+          "minLength": 4,
+          "maxLength": 64
+        },
+        "status": {
+          "type": "string",
+          "enum": ["Pending Transfer", "Verified Received"]
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "ownerUid",
+        "donorName",
+        "causeTitle",
+        "amountUgx",
+        "paymentMethod",
+        "referenceCode",
+        "status",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "MembershipRegistration": {
+      "title": "MembershipRegistration",
+      "description": "Member registration and entrance/annual subscription payment record.",
+      "type": "object",
+      "properties": {
+        "ownerUid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "subscriberName": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 120
+        },
+        "category": {
+          "type": "string",
+          "enum": [
+            "Active Member",
+            "Senior Member",
+            "Honorary Member",
+            "Associate Member",
+            "Corporate Member"
+          ]
+        },
+        "affiliationGroup": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 160
+        },
+        "subscriptionType": {
+          "type": "string",
+          "enum": ["New Entrance + Annual Subscription", "Annual Renewal"]
+        },
+        "district": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 100
+        },
+        "organizationName": {
+          "type": "string",
+          "maxLength": 180
+        },
+        "amountUgx": {
+          "type": "number"
+        },
+        "paymentMethod": {
+          "type": "string",
+          "enum": ["Equity Bank Uganda", "MTN Mobile Money", "Airtel Money"]
+        },
+        "referenceCode": {
+          "type": "string",
+          "minLength": 4,
+          "maxLength": 64
+        },
+        "status": {
+          "type": "string",
+          "enum": ["Pending Payment Verification", "Active Member Verified", "Renewal Due"]
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "ownerUid",
+        "subscriberName",
+        "category",
+        "affiliationGroup",
+        "subscriptionType",
+        "district",
+        "organizationName",
+        "amountUgx",
+        "paymentMethod",
+        "referenceCode",
+        "status",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "AdminGrant": {
+      "title": "AdminGrant",
+      "description": "Trusted administrator privilege grant.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "grantedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["uid", "grantedAt"]
+    },
+    "AuditLogEntry": {
+      "title": "AuditLogEntry",
+      "description": "Immutable operational audit trail entry.",
+      "type": "object",
+      "properties": {
+        "actorUid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "action": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 100
+        },
+        "targetPath": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["actorUid", "action", "targetPath", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserPublic" },
+      "description": "Operational user profile and onboarding settings."
+    },
+    "/users/{userId}/private/{docId}": {
+      "schema": { "$ref": "#/entities/UserPrivateInfo" },
+      "description": "Owner-only and admin-only PII contact document."
+    },
+    "/users/{userId}/courseProgress/{dayId}": {
+      "schema": { "$ref": "#/entities/CourseDayProgress" },
+      "description": "Participant online 10-day course completion records."
+    },
+    "/users/{userId}/certificates/{certId}": {
+      "schema": { "$ref": "#/entities/CourseCertificate" },
+      "description": "Verified A4 digital course completion certificates."
+    },
+    "/applications/{applicationId}": {
+      "schema": { "$ref": "#/entities/ProgramApplication" },
+      "description": "Real participant applications and cohort intake registrations."
+    },
+    "/programSettings/{settingId}": {
+      "schema": { "$ref": "#/entities/AdmissionsConfig" },
+      "description": "Admin-managed cohort admissions configuration."
+    },
+    "/investments/{investmentId}": {
+      "schema": { "$ref": "#/entities/InvestmentCommitment" },
+      "description": "Investor 11% annual accrual contracts and deposit records."
+    },
+    "/donations/{donationId}": {
+      "schema": { "$ref": "#/entities/DonationRecord" },
+      "description": "Community and partner donation records."
+    },
+    "/membershipRegistrations/{registrationId}": {
+      "schema": { "$ref": "#/entities/MembershipRegistration" },
+      "description": "Member category registrations and entrance/annual subscription payments."
+    },
+    "/admins/{adminId}": {
+      "schema": { "$ref": "#/entities/AdminGrant" },
+      "description": "Trusted National Administrator allowlist."
+    },
+    "/auditLogs/{logId}": {
+      "schema": { "$ref": "#/entities/AuditLogEntry" },
+      "description": "Append-only operational audit logs."
+    }
+  }
+}
