@@ -12,8 +12,6 @@ interface NavigationContextValue {
   setMobileMenuOpen: (open: boolean) => void;
   globalSearch: string;
   setGlobalSearch: (query: string) => void;
-  onboardingOpen: boolean;
-  setOnboardingOpen: (open: boolean) => void;
 }
 
 const NavigationContext = createContext<NavigationContextValue | undefined>(undefined);
@@ -35,7 +33,6 @@ export function NavigationProvider({ children }: { children: React.ReactNode }) 
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [globalSearch, setGlobalSearch] = useState('');
-  const [onboardingOpen, setOnboardingOpen] = useState(false);
 
   const navigate = useCallback((moduleId: ModuleRouteId) => {
     setActiveModule(moduleId);
@@ -76,8 +73,6 @@ export function NavigationProvider({ children }: { children: React.ReactNode }) 
         setMobileMenuOpen,
         globalSearch,
         setGlobalSearch,
-        onboardingOpen,
-        setOnboardingOpen,
       }}
     >
       {children}

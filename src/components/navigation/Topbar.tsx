@@ -28,17 +28,17 @@ export function Topbar() {
           <Menu className="w-5 h-5" />
         </button>
 
-        {/* Mobile Brand Title Only — guaranteed full visibility without truncation */}
+        {/* Mobile & Tablet Brand Title — prominent forest green */}
         <button
           type="button"
           onClick={() => navigate('dashboard')}
-          className="md:hidden font-display text-base sm:text-lg font-extrabold tracking-tight text-slate-900 dark:text-slate-50 whitespace-nowrap cursor-pointer"
+          className="lg:hidden font-display text-xl sm:text-2xl font-bold tracking-tight text-[#14532D] dark:text-white whitespace-nowrap cursor-pointer"
         >
           JENGA TAIFA
         </button>
 
         {/* Desktop Breadcrumbs */}
-        <div className="hidden md:block min-w-0 truncate">
+        <div className="hidden lg:block min-w-0 truncate">
           <Breadcrumbs
             items={[
               { label: 'JENGA TAIFA', moduleId: 'dashboard' },
@@ -60,7 +60,7 @@ export function Topbar() {
           title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
         >
           {theme === 'dark' ? (
-            <Sun className="w-4 h-4 text-amber-400" aria-hidden="true" />
+            <Sun className="w-4 h-4 text-[#ffd700]" aria-hidden="true" />
           ) : (
             <Moon className="w-4 h-4 text-slate-700" aria-hidden="true" />
           )}

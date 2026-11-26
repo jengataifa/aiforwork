@@ -16,7 +16,7 @@ export function ProgressIndicator({
     tone === 'teal'
       ? 'bg-teal-600 dark:bg-[#2DD4BF]'
       : tone === 'amber'
-        ? 'bg-amber-500 dark:bg-amber-400'
+        ? 'bg-[#ffd700]'
         : 'bg-gradient-to-r from-emerald-600 to-emerald-500 dark:from-[#22C55E] dark:to-[#4ADE80]';
 
   return (

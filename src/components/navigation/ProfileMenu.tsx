@@ -1,4 +1,4 @@
-import { LogOut, Shield, SlidersHorizontal } from 'lucide-react';
+import { LogOut, Settings, Shield } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useAuth } from '../../app/providers/AuthProvider';
 import { useNavigation } from '../../app/providers/NavigationProvider';
@@ -7,7 +7,7 @@ import { UserRoleId } from '../../types/rbac';
 
 export function ProfileMenu() {
   const { user, profile, isAdminUser, role, switchRoleView, signOut } = useAuth();
-  const { navigate, setOnboardingOpen } = useNavigation();
+  const { navigate } = useNavigation();
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -88,11 +88,13 @@ export function ProfileMenu() {
               type="button"
               onClick={() => {
                 setOpen(false);
-                setOnboardingOpen(true);
+                navigate('settings');
               }}
               className="w-full flex items-center gap-2.5 px-3 py-2.5 text-sm text-slate-700 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-[#131C31] rounded-md transition-colors cursor-pointer"
             >
-              <SlidersHorizontal className="w-4 h-4 text-emerald-700 dark:text-[#4ADE80]" />
+              <span className="p-1 rounded bg-emerald-100 dark:bg-[#132920] text-emerald-700 dark:text-[#4ADE80] inline-flex items-center justify-center">
+                <Settings className="w-3.5 h-3.5" />
+              </span>
               <span>Profile &amp; Settings</span>
             </button>
 
@@ -105,7 +107,9 @@ export function ProfileMenu() {
                 }}
                 className="w-full flex items-center gap-2.5 px-3 py-2.5 text-sm text-slate-700 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-[#131C31] rounded-md transition-colors cursor-pointer"
               >
-                <Shield className="w-4 h-4 text-amber-600 dark:text-amber-400" />
+                <span className="p-1 rounded bg-[#ffd700] text-slate-950 inline-flex items-center justify-center">
+                  <Shield className="w-3.5 h-3.5" />
+                </span>
                 <span>Roles &amp; Governance</span>
               </button>
             )}

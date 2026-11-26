@@ -329,7 +329,7 @@ export function MembershipPage() {
             <h2 className="font-display text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-50">
               Membership Eligibility
             </h2>
-            <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed">
+            <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed text-justify">
               Open to persons aged <strong>18 years and above</strong> belonging to the veteran fraternity, eligible
               beneficiaries, or allied compatriots who subscribe to our objectives:
             </p>
@@ -348,7 +348,7 @@ export function MembershipPage() {
               <div className="text-xs font-mono uppercase tracking-wider text-emerald-700 dark:text-[#4ADE80] font-bold">
                 Equal Welcome Guarantee
               </div>
-              <p className="text-sm text-slate-800 dark:text-slate-200 leading-relaxed">
+              <p className="text-sm text-slate-800 dark:text-slate-200 leading-relaxed text-justify">
                 Every subscriber is welcomed equally with zero discrimination by color, ethnicity, political ideology,
                 religious affiliation, gender, education, or economic background—rooted in{' '}
                 <strong>Pan-Africanism</strong>, <strong>East African Community integration</strong>, and{' '}
@@ -424,7 +424,7 @@ export function MembershipPage() {
                       </span>
                     )}
                   </div>
-                  <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">{cat.summary}</p>
+                  <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed text-justify">{cat.summary}</p>
                 </div>
 
                 {cat.openForRegistration ? (
@@ -466,7 +466,7 @@ export function MembershipPage() {
               <div className="text-base font-bold text-slate-900 dark:text-slate-100">
                 Sign in to register &amp; pay membership subscription
               </div>
-              <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+              <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed text-justify">
                 Signing in binds your official JENGA TAIFA membership receipt and category certificate directly to your
                 account.
               </p>
@@ -634,7 +634,7 @@ export function MembershipPage() {
                   </div>
                   <div>
                     <div className="text-sm font-bold text-slate-900 dark:text-slate-100">{item.title}</div>
-                    <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed mt-0.5">
+                    <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed mt-0.5 text-justify">
                       {item.detail}
                     </p>
                   </div>

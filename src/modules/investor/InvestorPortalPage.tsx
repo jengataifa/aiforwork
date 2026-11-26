@@ -626,7 +626,7 @@ export function InvestorPortalPage() {
                   <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-[#4ADE80] shrink-0" />
                   <span>{pillar.title}</span>
                 </div>
-                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">{pillar.detail}</p>
+                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed text-justify">{pillar.detail}</p>
               </div>
             ))}
           </div>
@@ -650,7 +650,7 @@ export function InvestorPortalPage() {
                   className={
                     s.q1ReportSubmitted
                       ? 'text-emerald-700 dark:text-[#4ADE80] font-mono font-bold shrink-0'
-                      : 'text-amber-600 dark:text-amber-400 font-mono font-bold shrink-0'
+                      : 'px-2 py-0.5 rounded bg-[#ffd700]/25 text-slate-950 dark:bg-[#ffd700]/15 dark:text-[#ffd700] font-mono font-bold shrink-0'
                   }
                 >
                   {s.q1ReportSubmitted ? 'Q1 Verified' : 'Q1 Pending'}

@@ -1,8 +1,7 @@
-import { Mail, PanelLeftClose, PanelLeftOpen, Phone, X } from 'lucide-react';
+import { PanelLeftClose, PanelLeftOpen, X } from 'lucide-react';
 import { useAuth } from '../../app/providers/AuthProvider';
 import { useNavigation } from '../../app/providers/NavigationProvider';
 import { NAV_GROUPS, NAV_ITEMS } from '../../constants/navigation';
-import { ORGANIZATION_CONTACT } from '../../constants/program';
 import { NavIcon } from '../ui/IconResolver';
 
 export function ApplicationSidebar() {
@@ -21,10 +20,10 @@ export function ApplicationSidebar() {
 
     return (
       <div className="flex flex-col h-full bg-white dark:bg-[#090F1C] border-r border-slate-200 dark:border-slate-800/80 select-none">
-        {/* Brand lockup */}
+        {/* Brand lockup — prominent JENGA TAIFA wordmark */}
         <div
           className={`h-16 flex items-center justify-between gap-2 border-b border-slate-200 dark:border-slate-800/80 shrink-0 ${
-            collapsed ? 'px-2.5' : 'px-4'
+            collapsed ? 'px-2.5' : 'px-3.5'
           }`}
         >
           <button
@@ -32,11 +31,17 @@ export function ApplicationSidebar() {
             onClick={() => navigate('dashboard')}
             className="flex items-center gap-2.5 min-w-0 text-left cursor-pointer flex-1"
           >
-            <div className="w-8 h-8 rounded-md bg-gradient-to-br from-emerald-600 to-teal-500 dark:from-[#22C55E] dark:to-[#2DD4BF] text-white dark:text-[#070B14] font-display font-bold text-xs flex items-center justify-center shrink-0">
-              JT
+            <div className="w-9 h-9 rounded-lg bg-[#14532D] p-1 flex items-center justify-center shrink-0 shadow-xs">
+              <div className="w-full h-full rounded-full bg-white flex items-center justify-center overflow-hidden p-0.5">
+                <img
+                  src="./assets/aistudio/Logo_with_bg2_784a5e25.png"
+                  alt="JENGA TAIFA Logo"
+                  className="w-full h-full object-contain"
+                />
+              </div>
             </div>
             {!collapsed && (
-              <span className="font-display text-lg font-extrabold text-slate-900 dark:text-slate-50 tracking-tight truncate">
+              <span className="font-display text-[22px] leading-none font-bold text-[#14532D] dark:text-white tracking-tight whitespace-nowrap">
                 JENGA TAIFA
               </span>
             )}
@@ -75,7 +80,8 @@ export function ApplicationSidebar() {
             return (
               <div key={group.id} className="space-y-1.5">
                 {!collapsed && (
-                  <div className="px-2.5 py-1 text-xs font-bold tracking-wider text-slate-500 dark:text-slate-400">
+                  <div className="px-2.5 py-1 text-xs font-bold tracking-wider text-slate-700 dark:text-[#ffd700]">
+                    <span className="inline-block w-2 h-2 rounded-xs bg-[#ffd700] mr-2 align-middle" aria-hidden="true" />
                     {group.label}
                   </div>
                 )}
@@ -113,37 +119,6 @@ export function ApplicationSidebar() {
             );
           })}
         </nav>
-
-        {/* Bottom Get In Touch Card (Phone & Email only) */}
-        <div className="p-3 border-t border-slate-200 dark:border-slate-800/80 shrink-0">
-          {!collapsed ? (
-            <div className="p-3.5 rounded-lg bg-slate-50 dark:bg-[#0D1424] border border-slate-200 dark:border-slate-800 space-y-2.5 text-xs">
-              <div className="font-semibold text-sm text-slate-900 dark:text-slate-100">Get in touch</div>
-              <a
-                href={`tel:${ORGANIZATION_CONTACT.phone}`}
-                className="flex items-center gap-2 text-slate-700 dark:text-slate-300 hover:text-emerald-700 dark:hover:text-[#4ADE80] transition-colors"
-              >
-                <Phone className="w-4 h-4 text-emerald-600 dark:text-[#4ADE80] shrink-0" />
-                <span className="truncate">{ORGANIZATION_CONTACT.phoneDisplay}</span>
-              </a>
-              <a
-                href={`mailto:${ORGANIZATION_CONTACT.email}`}
-                className="flex items-center gap-2 text-slate-700 dark:text-slate-300 hover:text-emerald-700 dark:hover:text-[#4ADE80] transition-colors"
-              >
-                <Mail className="w-4 h-4 text-teal-600 dark:text-[#2DD4BF] shrink-0" />
-                <span className="truncate">{ORGANIZATION_CONTACT.email}</span>
-              </a>
-            </div>
-          ) : (
-            <a
-              href={`tel:${ORGANIZATION_CONTACT.phone}`}
-              title={`Get in touch: ${ORGANIZATION_CONTACT.phoneDisplay}`}
-              className="w-full h-10 flex items-center justify-center rounded-md bg-slate-50 dark:bg-[#0D1424] border border-slate-200 dark:border-slate-800 text-emerald-600 dark:text-[#4ADE80]"
-            >
-              <Phone className="w-4 h-4" />
-            </a>
-          )}
-        </div>
       </div>
     );
   };
@@ -152,7 +127,7 @@ export function ApplicationSidebar() {
     <>
       <aside
         className={`hidden lg:block shrink-0 transition-[width] duration-200 ease-out h-screen sticky top-0 ${
-          sidebarCollapsed ? 'w-[86px]' : 'w-[268px]'
+          sidebarCollapsed ? 'w-[86px]' : 'w-[280px]'
         }`}
       >
         {renderSidebarBody(false)}

@@ -21,9 +21,9 @@ const TONE_STYLES: Record<SemanticTone, { text: string; bg: string; border: stri
     Icon: Clock,
   },
   warning: {
-    text: 'text-amber-700 dark:text-amber-400',
-    bg: 'bg-amber-50 dark:bg-amber-400/8',
-    border: 'border-amber-200 dark:border-amber-400/25',
+    text: 'text-slate-950 dark:text-[#ffd700]',
+    bg: 'bg-[#ffd700]/30 dark:bg-[#ffd700]/12',
+    border: 'border-[#ffd700] dark:border-[#ffd700]/40',
     Icon: AlertCircle,
   },
   danger: {

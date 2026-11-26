@@ -1,7 +1,7 @@
 import { NavGroupConfig, NavItemConfig } from '../types/navigation';
 
 export const NAV_GROUPS: NavGroupConfig[] = [
-  { id: 'ai_program', label: 'AI FOR WORK & BUSINESS', defaultExpanded: true },
+  { id: 'ai_program', label: 'AI PROGRAM', defaultExpanded: true },
   { id: 'community', label: 'COMMUNITY', defaultExpanded: true },
   { id: 'finance', label: 'FINANCE', defaultExpanded: true },
 ];
@@ -19,11 +19,11 @@ export const NAV_ITEMS: NavItemConfig[] = [
   },
   {
     id: 'course',
-    label: 'Practical AI Course',
+    label: 'AI for Work & Business',
     groupId: 'ai_program',
     iconName: 'BookOpen',
     phaseStatus: 'active-foundation',
-    summary: 'Day 1 to Day 10 practical AI training, income service templates, final exam, and A4 PDF certification.',
+    summary: 'Day 1 to Day 10 practical AI training, income service templates, final exam, and digital certification.',
     plannedCollections: ['users'],
     connectedModules: ['dashboard', 'applications'],
   },
@@ -40,7 +40,7 @@ export const NAV_ITEMS: NavItemConfig[] = [
   },
   {
     id: 'about-us',
-    label: 'About Us',
+    label: 'About Jenga Taifa',
     groupId: 'community',
     iconName: 'Compass',
     phaseStatus: 'active-foundation',
@@ -60,7 +60,7 @@ export const NAV_ITEMS: NavItemConfig[] = [
   },
   {
     id: 'sacco-network',
-    label: 'SACCOs',
+    label: 'Jenga Taifa SACCOs',
     groupId: 'community',
     iconName: 'Building2',
     phaseStatus: 'active-foundation',

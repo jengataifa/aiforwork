@@ -2,6 +2,10 @@ import { ChevronRight } from 'lucide-react';
 import React from 'react';
 import { ModuleRouteId } from '../../types/navigation';
 
+export function BrandHighlightedText({ text }: { text: string }) {
+  return <>{text}</>;
+}
+
 export interface BreadcrumbItem {
   label: string;
   moduleId?: ModuleRouteId;
@@ -15,9 +19,10 @@ export function Breadcrumbs({
   onNavigate?: (moduleId: ModuleRouteId) => void;
 }) {
   return (
-    <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-sm text-slate-500 dark:text-slate-400">
+    <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-xs sm:text-sm uppercase tracking-wide text-slate-500 dark:text-slate-400">
       {items.map((item, idx) => {
         const isLast = idx === items.length - 1;
+        const isTopBrand = idx === 0 && item.label === 'JENGA TAIFA';
         return (
           <React.Fragment key={`${item.label}-${idx}`}>
             {idx > 0 && (
@@ -27,12 +32,16 @@ export function Breadcrumbs({
               <button
                 type="button"
                 onClick={() => onNavigate(item.moduleId!)}
-                className="hover:text-slate-900 dark:hover:text-slate-200 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+                className={`uppercase transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+                  isTopBrand
+                    ? 'font-bold text-[#14532D] dark:text-white hover:opacity-80'
+                    : 'font-semibold text-slate-800 dark:text-slate-100 hover:text-emerald-700 dark:hover:text-[#ffd700]'
+                }`}
               >
                 {item.label}
               </button>
             ) : (
-              <span className={isLast ? 'text-slate-900 dark:text-slate-200 font-semibold truncate' : 'truncate'}>
+              <span className={isLast ? 'text-slate-900 dark:text-slate-200 font-semibold truncate uppercase' : 'truncate uppercase'}>
                 {item.label}
               </span>
             )}
@@ -54,7 +63,11 @@ export function PageHeader({ title, subtitle, metaLine, actions }: PageHeaderPro
   return (
     <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4 pb-6 border-b border-slate-200 dark:border-slate-800/80">
       <div className="min-w-0">
-        {metaLine && <p className="text-sm font-semibold text-emerald-700 dark:text-[#4ADE80] mb-1.5">{metaLine}</p>}
+        {metaLine && (
+          <p className="inline-block px-2 py-0.5 rounded bg-[#ffd700] text-slate-950 text-xs font-bold mb-2">
+            {metaLine}
+          </p>
+        )}
         <h1 className="font-display text-2xl sm:text-3xl font-bold text-slate-900 dark:text-slate-50 tracking-tight [text-wrap:balance]">
           {title}
         </h1>

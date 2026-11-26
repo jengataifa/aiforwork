@@ -1,7 +1,6 @@
-import { Globe, Landmark, Mail, Moon, Phone, RefreshCw, SlidersHorizontal, Sun, UserCheck } from 'lucide-react';
+import { Globe, Landmark, Mail, Moon, Phone, RefreshCw, Sun, UserCheck } from 'lucide-react';
 import { useAuth } from '../../app/providers/AuthProvider';
 import { useCurrency } from '../../app/providers/CurrencyProvider';
-import { useNavigation } from '../../app/providers/NavigationProvider';
 import { useTheme } from '../../app/providers/ThemeProvider';
 import { PageHeader, SectionHeader } from '../../components/ui/PageHeader';
 import { ORGANIZATION_BANK_DETAILS, ORGANIZATION_CONTACT, PROGRAM_IDENTITY } from '../../constants/program';
@@ -10,7 +9,6 @@ import { OFFICIAL_SACCOS } from '../../constants/saccos';
 export function SettingsPage() {
   const { user, profile, isAuthenticated, signInWithGoogle, signOut, saveUserOnboarding } = useAuth();
   const { exchangeRate, refreshRate } = useCurrency();
-  const { setOnboardingOpen } = useNavigation();
   const { theme, setTheme } = useTheme();
 
   const userSacco = OFFICIAL_SACCOS.find((s) => s.id === profile.saccoId) ?? OFFICIAL_SACCOS[0];
@@ -61,20 +59,11 @@ export function SettingsPage() {
           </div>
 
           <div className="flex flex-wrap items-center gap-2.5">
-            <button
-              type="button"
-              onClick={() => setOnboardingOpen(true)}
-              className="h-9 px-3.5 rounded-lg bg-emerald-600 dark:bg-[#4ADE80] hover:bg-emerald-700 dark:hover:bg-[#22C55E] text-white dark:text-[#070B14] text-xs font-semibold inline-flex items-center gap-1.5 cursor-pointer"
-            >
-              <SlidersHorizontal className="w-3.5 h-3.5" />
-              <span>Edit Profile &amp; Onboarding</span>
-            </button>
-
             {isAuthenticated ? (
               <button
                 type="button"
                 onClick={() => void signOut()}
-                className="h-9 px-3.5 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 text-xs font-medium cursor-pointer"
+                className="btn-secondary-gold h-9 px-3.5 rounded-lg text-slate-900 dark:text-slate-100 text-xs font-semibold cursor-pointer"
               >
                 Sign Out
               </button>
@@ -115,7 +104,9 @@ export function SettingsPage() {
                     : 'text-slate-400 hover:text-slate-100'
                 }`}
               >
-                <Sun className="w-3.5 h-3.5 text-amber-500" />
+                <span className="w-4 h-4 rounded bg-[#ffd700] text-slate-950 inline-flex items-center justify-center">
+                  <Sun className="w-3 h-3" />
+                </span>
                 <span>Light</span>
               </button>
               <button
@@ -144,7 +135,7 @@ export function SettingsPage() {
               type="button"
               onClick={() => void refreshRate()}
               disabled={exchangeRate.isRefreshing}
-              className="h-8 px-2.5 rounded bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 inline-flex items-center gap-1.5 text-[11px] font-medium cursor-pointer"
+              className="btn-secondary-gold h-8 px-3 rounded-lg text-slate-900 dark:text-slate-100 inline-flex items-center gap-1.5 text-[11px] font-semibold cursor-pointer"
             >
               <RefreshCw className={`w-3.5 h-3.5 ${exchangeRate.isRefreshing ? 'animate-spin' : ''}`} />
               <span>Refresh</span>

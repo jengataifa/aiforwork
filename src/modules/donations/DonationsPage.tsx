@@ -242,7 +242,7 @@ export function DonationsPage() {
                         UGX {cause.suggestedUgx.toLocaleString('en-UG')}
                       </span>
                     </div>
-                    <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">{cause.description}</p>
+                    <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed text-justify">{cause.description}</p>
                   </div>
                 </button>
               );
@@ -325,12 +325,14 @@ export function DonationsPage() {
 
           <div className="bg-white dark:bg-[#0D1424] border border-slate-200 dark:border-slate-800/90 rounded-2xl p-5 sm:p-6 space-y-3">
             <div className="flex items-center gap-2.5">
-              <Smartphone className="w-5 h-5 text-amber-500" />
+              <span className="p-1.5 rounded-lg bg-[#ffd700] text-slate-950 inline-flex items-center justify-center">
+                <Smartphone className="w-4 h-4" />
+              </span>
               <h3 className="font-display text-lg font-bold text-slate-900 dark:text-slate-100">
                 MTN Mobile Money &amp; Airtel Money
               </h3>
             </div>
-            <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+            <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed text-justify">
               Send directly via MTN MoMo or Airtel Money to our official treasury number and verify in checkout:
             </p>
             <div className="p-3 rounded-xl bg-slate-50 dark:bg-[#090F1C] border border-slate-200 dark:border-slate-800 flex items-center justify-between gap-2">

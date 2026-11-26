@@ -161,14 +161,14 @@ export function ProPaymentCheckoutModal({
           </div>
 
           {!isAuthenticated && (
-            <div className="p-3.5 rounded-lg bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-700/40 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
-              <span className="text-amber-900 dark:text-amber-200">
+            <div className="p-3.5 rounded-lg bg-[#ffd700]/15 dark:bg-[#ffd700]/10 border border-[#ffd700]/75 dark:border-[#ffd700]/40 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+              <span className="text-slate-900 dark:text-[#ffd700] font-medium">
                 Sign in with Google to bind this transaction receipt to your account history.
               </span>
               <button
                 type="button"
                 onClick={() => void signInWithGoogle()}
-                className="h-9 px-3 rounded bg-amber-600 text-white font-semibold inline-flex items-center gap-1.5 shrink-0 cursor-pointer"
+                className="h-9 px-3 rounded bg-[#ffd700] hover:bg-[#e6c200] text-slate-950 font-bold inline-flex items-center gap-1.5 shrink-0 cursor-pointer"
               >
                 <LogIn className="w-3.5 h-3.5" />
                 <span>Sign In</span>
@@ -201,7 +201,9 @@ export function ProPaymentCheckoutModal({
                       ) : (
                         <Smartphone
                           className={`w-4 h-4 shrink-0 ${
-                            method === 'MTN Mobile Money' ? 'text-amber-500' : 'text-rose-500'
+                            method === 'MTN Mobile Money'
+                              ? 'bg-[#ffd700] text-slate-950 p-0.5 rounded'
+                              : 'text-rose-500'
                           }`}
                         />
                       )}

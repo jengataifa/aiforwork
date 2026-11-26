@@ -16,6 +16,7 @@ interface MouDraftFields {
   saccoName: string;
   regNumber: string;
   address: string;
+  membersCount: string;
   signingPersonName: string;
   signingPersonTitle: string;
   generalSecretaryName: string;
@@ -25,6 +26,7 @@ const EMPTY_MOU_DRAFT: MouDraftFields = {
   saccoName: '',
   regNumber: '',
   address: '',
+  membersCount: '',
   signingPersonName: '',
   signingPersonTitle: 'Chairperson',
   generalSecretaryName: PROGRAM_IDENTITY.generalSecretary,
@@ -77,6 +79,7 @@ export function SaccoNetworkPage() {
           ? ''
           : sacco.regNumber,
       address: sacco.address,
+      membersCount: String(sacco.members),
       signingPersonName: '',
       signingPersonTitle: 'Chairperson',
       generalSecretaryName: PROGRAM_IDENTITY.generalSecretary,
@@ -87,6 +90,7 @@ export function SaccoNetworkPage() {
   const displaySaccoName = mouDraft.saccoName.trim() || '[SACCO / Cooperative Society Name]';
   const displayRegNumber = formatRegNumberDisplay(mouDraft.regNumber);
   const displayAddress = mouDraft.address.trim() || '[District / Physical Address]';
+  const displayMembers = mouDraft.membersCount.trim() || '_______';
   const displaySignatory = mouDraft.signingPersonName.trim() || '__________________________';
   const displaySignatoryTitle = mouDraft.signingPersonTitle.trim() || 'Chairperson';
   const displayGenSec = mouDraft.generalSecretaryName.trim() || PROGRAM_IDENTITY.generalSecretary;
@@ -101,7 +105,7 @@ export function SaccoNetworkPage() {
           <button
             type="button"
             onClick={openBlankMouTemplate}
-            className="h-10 px-4 rounded-lg bg-emerald-600 dark:bg-[#4ADE80] hover:bg-emerald-700 dark:hover:bg-[#22C55E] text-white dark:text-[#070B14] text-sm font-semibold inline-flex items-center gap-2 cursor-pointer"
+            className="btn-luxury-green h-10 px-4 rounded-lg bg-emerald-600 text-white text-sm font-semibold inline-flex items-center gap-2 cursor-pointer"
           >
             <FileText className="w-4 h-4" />
             <span>Preview MOU template</span>
@@ -181,111 +185,63 @@ export function SaccoNetworkPage() {
         </div>
       </section>
 
-      {/* Mobile Cards (< lg) */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 lg:hidden">
+      {/* Responsive SACCO Grid Cards Across All Devices */}
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
         {filteredSaccos.map((s) => (
           <div
             key={s.id}
-            className="bg-white dark:bg-[#0D1424] border border-slate-200 dark:border-slate-800 rounded-xl p-4 space-y-2.5"
+            className="bg-white dark:bg-[#0D1424] border border-slate-200 dark:border-slate-800/90 rounded-xl p-4 sm:p-5 flex flex-col justify-between gap-3.5 transition-all hover:border-emerald-500/60 dark:hover:border-[#4ADE80]/50"
           >
-            <div className="flex items-start justify-between gap-2">
-              <span className="font-mono text-xs font-semibold text-emerald-700 dark:text-[#4ADE80]">
-                #{String(s.number).padStart(2, '0')} · {s.regNumber}
-              </span>
-              {s.phase1Funded ? (
-                <StatusBadge label="Phase 1: UGX 6.25M" tone="success" />
-              ) : (
-                <StatusBadge label="Affiliated Society" tone="neutral" />
+            <div className="space-y-2.5">
+              <div className="flex items-start justify-between gap-2">
+                <span className="font-mono text-xs font-semibold text-emerald-700 dark:text-[#4ADE80]">
+                  #{String(s.number).padStart(2, '0')} · {s.regNumber}
+                </span>
+                {s.phase1Funded ? (
+                  <StatusBadge label="Phase 1: UGX 6.25M" tone="success" />
+                ) : (
+                  <StatusBadge label="Affiliated Society" tone="neutral" />
+                )}
+              </div>
+
+              <h3 className="text-sm sm:text-[15px] font-semibold text-slate-900 dark:text-slate-100 leading-snug">
+                {s.name}
+              </h3>
+
+              <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-slate-600 dark:text-slate-400">
+                <span className="inline-flex items-center gap-1">
+                  <MapPin className="w-3.5 h-3.5 text-teal-600 dark:text-[#2DD4BF] shrink-0" />
+                  <span>{s.address}</span>
+                </span>
+                <span className="font-mono font-semibold text-slate-800 dark:text-slate-200">
+                  {s.members.toLocaleString('en-UG')} Members
+                </span>
+              </div>
+
+              {s.phase1Project && (
+                <div className="text-xs p-2.5 rounded-lg bg-emerald-50/70 dark:bg-[#102022] border border-emerald-200/70 dark:border-[#4ADE80]/20 text-emerald-800 dark:text-[#4ADE80]">
+                  Project: {s.phase1Project} {s.q1ReportSubmitted ? '· Q1 Report Verified' : ''}
+                </div>
+              )}
+
+              {s.fieldHighlight && (
+                <div className="text-xs text-slate-600 dark:text-slate-400 italic">{s.fieldHighlight}</div>
               )}
             </div>
-            <h3 className="text-sm font-semibold text-slate-900 dark:text-slate-100 leading-snug">{s.name}</h3>
-            <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-slate-600 dark:text-slate-400">
-              <span className="inline-flex items-center gap-1">
-                <MapPin className="w-3.5 h-3.5 text-teal-600 dark:text-[#2DD4BF]" />
-                {s.address}
-              </span>
-              <span className="font-mono font-medium text-slate-800 dark:text-slate-200">{s.members} Members</span>
-            </div>
-            {s.phase1Project && (
-              <div className="text-xs p-2.5 rounded bg-emerald-50/70 dark:bg-[#102022] text-emerald-800 dark:text-[#4ADE80]">
-                Project: {s.phase1Project} {s.q1ReportSubmitted ? '· Q1 Report Verified' : ''}
-              </div>
-            )}
+
             <button
               type="button"
               onClick={() => openSaccoMou(s)}
-              className="w-full h-10 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-[#131F36] text-sm font-medium text-slate-800 dark:text-slate-200 inline-flex items-center justify-center gap-1.5 cursor-pointer"
+              className="btn-luxury-green w-full h-10 rounded-lg bg-emerald-600 text-white text-sm font-semibold inline-flex items-center justify-center gap-1.5 cursor-pointer"
             >
-              <FileText className="w-4 h-4 text-emerald-600 dark:text-[#4ADE80]" />
-              <span>View &amp; Print MOU</span>
+              <FileText className="w-4 h-4" />
+              <span>View MOU</span>
             </button>
           </div>
         ))}
       </div>
 
-      {/* Desktop Registry Table (>= lg) */}
-      <section className="hidden lg:block bg-white dark:bg-[#0D1424] border border-slate-200 dark:border-slate-800/90 rounded-xl overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full border-collapse text-left text-sm">
-            <thead>
-              <tr className="bg-slate-50 dark:bg-[#090F1C] border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400">
-                <th className="py-3.5 px-4 font-semibold w-14">No.</th>
-                <th className="py-3.5 px-4 font-semibold">SACCO / Group Name</th>
-                <th className="py-3.5 px-4 font-semibold whitespace-nowrap">Reg. Number</th>
-                <th className="py-3.5 px-4 font-semibold whitespace-nowrap">Address</th>
-                <th className="py-3.5 px-4 font-semibold text-right whitespace-nowrap">Members</th>
-                <th className="py-3.5 px-4 font-semibold whitespace-nowrap">Phase 1 Status</th>
-                <th className="py-3.5 px-4 font-semibold text-right">MOU</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-200 dark:divide-slate-800/70">
-              {filteredSaccos.map((s) => (
-                <tr key={s.id} className="hover:bg-slate-50 dark:hover:bg-[#101829] transition-colors">
-                  <td className="py-3.5 px-4 font-mono text-slate-500">{s.number}</td>
-                  <td className="py-3.5 px-4">
-                    <div className="font-medium text-slate-900 dark:text-slate-100">{s.name}</div>
-                    {s.fieldHighlight && (
-                      <div className="text-xs text-emerald-700 dark:text-[#4ADE80] mt-0.5">{s.fieldHighlight}</div>
-                    )}
-                  </td>
-                  <td className="py-3.5 px-4 font-mono text-slate-700 dark:text-slate-300 whitespace-nowrap">
-                    {s.regNumber}
-                  </td>
-                  <td className="py-3.5 px-4 text-slate-700 dark:text-slate-300 whitespace-nowrap">{s.address}</td>
-                  <td className="py-3.5 px-4 font-mono font-semibold text-right text-slate-900 dark:text-slate-100 tabular-nums">
-                    {s.members}
-                  </td>
-                  <td className="py-3.5 px-4 whitespace-nowrap">
-                    {s.phase1Funded ? (
-                      <div className="space-y-0.5">
-                        <StatusBadge
-                          label={s.q1ReportSubmitted ? 'Funded · Q1 Verified' : 'Funded · Active'}
-                          tone={s.q1ReportSubmitted ? 'success' : 'info'}
-                        />
-                        <div className="text-xs text-slate-500">{s.phase1Project}</div>
-                      </div>
-                    ) : (
-                      <StatusBadge label="Registered" tone="neutral" />
-                    )}
-                  </td>
-                  <td className="py-3.5 px-4 text-right whitespace-nowrap">
-                    <button
-                      type="button"
-                      onClick={() => openSaccoMou(s)}
-                      className="h-9 px-3 rounded-lg border border-slate-200 dark:border-slate-700 hover:border-emerald-500 dark:hover:border-[#4ADE80] text-xs font-semibold text-slate-700 dark:text-slate-200 inline-flex items-center gap-1.5 cursor-pointer"
-                    >
-                      <FileText className="w-3.5 h-3.5" />
-                      <span>MOU</span>
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      {/* Customizable MOU Template & Print Modal */}
+      {/* Customizable MOU Template & Print Modal (MOU Document Above, Customise Box Below) */}
       <Modal
         open={mouOpen}
         onClose={() => setMouOpen(false)}
@@ -301,7 +257,7 @@ export function SaccoNetworkPage() {
             <button
               type="button"
               onClick={() => window.print()}
-              className="h-10 px-4 rounded-lg bg-emerald-600 dark:bg-[#4ADE80] hover:bg-emerald-700 dark:hover:bg-[#22C55E] text-white dark:text-[#070B14] text-sm font-semibold inline-flex items-center gap-1.5 cursor-pointer"
+              className="btn-luxury-green h-10 px-4 rounded-lg bg-emerald-600 text-white text-sm font-semibold inline-flex items-center gap-1.5 cursor-pointer"
             >
               <Printer className="w-4 h-4" />
               <span>Print / Save PDF</span>
@@ -309,7 +265,7 @@ export function SaccoNetworkPage() {
             <button
               type="button"
               onClick={() => setMouOpen(false)}
-              className="h-10 px-4 rounded-lg bg-slate-200 dark:bg-slate-800 text-sm font-medium text-slate-800 dark:text-slate-200 cursor-pointer"
+              className="btn-secondary-gold h-10 px-4 rounded-lg text-sm font-semibold text-slate-900 dark:text-slate-100 cursor-pointer"
             >
               Close
             </button>
@@ -317,7 +273,59 @@ export function SaccoNetworkPage() {
         }
       >
         <div className="space-y-5 text-sm leading-relaxed text-slate-800 dark:text-slate-200">
-          {/* Editable Fields Bar */}
+          {/* Printable Legal MOU Body FIRST */}
+          <div className="p-5 rounded-xl bg-slate-50 dark:bg-[#090F1C] border border-slate-200 dark:border-slate-800 space-y-3">
+            <div className="text-center font-display font-bold text-base uppercase">
+              THE REPUBLIC OF UGANDA · MEMORANDUM OF UNDERSTANDING
+            </div>
+            <p className="text-justify">
+              THIS MEMORANDUM OF UNDERSTANDING is made between{' '}
+              <strong>{PROGRAM_IDENTITY.implementingOrganization}</strong>, an organisation incorporated under the laws of
+              the Republic of Uganda (hereinafter referred to as <strong>&quot;JENGA TAIFA&quot;</strong>), and{' '}
+              <strong>{displaySaccoName}</strong> (Reg./Certificate No:{' '}
+              <strong className="font-mono">{displayRegNumber}</strong>, Address: <strong>{displayAddress}</strong>,
+              Registered Membership: <strong className="font-mono">{displayMembers} Members</strong>) (hereinafter
+              referred to as <strong>&quot;THE SACCO&quot;</strong>).
+            </p>
+          </div>
+
+          <div className="space-y-3.5">
+            {SACCO_MOU_CLAUSES.map((clause) => (
+              <div key={clause.number} className="space-y-1">
+                <div className="font-display font-bold text-slate-900 dark:text-slate-100">
+                  {clause.number}. {clause.title}
+                </div>
+                {clause.points.map((pt) => (
+                  <p key={pt} className="text-slate-700 dark:text-slate-300 pl-3 text-justify">
+                    {pt}
+                  </p>
+                ))}
+              </div>
+            ))}
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-slate-200 dark:border-slate-800">
+            <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 space-y-2">
+              <div className="font-bold text-xs uppercase">
+                FOR &amp; ON BEHALF OF {PROGRAM_IDENTITY.implementingOrganization}
+              </div>
+              <div className="text-slate-600 dark:text-slate-400">Signature: ________________________</div>
+              <div className="text-slate-800 dark:text-slate-200">
+                Name / Title: <strong>{displayGenSec}</strong>, {PROGRAM_IDENTITY.generalSecretaryTitle}
+              </div>
+              <div className="text-slate-600 dark:text-slate-400">Date &amp; Official Seal: __________________</div>
+            </div>
+            <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 space-y-2">
+              <div className="font-bold text-xs uppercase">FOR &amp; ON BEHALF OF {displaySaccoName}</div>
+              <div className="text-slate-600 dark:text-slate-400">Signature: ________________________</div>
+              <div className="text-slate-800 dark:text-slate-200">
+                Authorized Signatory: <strong>{displaySignatory}</strong> ({displaySignatoryTitle})
+              </div>
+              <div className="text-slate-600 dark:text-slate-400">Date &amp; SACCO Stamp: __________________</div>
+            </div>
+          </div>
+
+          {/* Editable Fields Bar Placed BELOW MOU Content Card */}
           <div className="p-4 rounded-xl bg-slate-50 dark:bg-[#090F1C] border border-slate-200 dark:border-slate-800 space-y-3 print:hidden">
             <div className="text-xs font-mono uppercase tracking-wider text-emerald-700 dark:text-[#4ADE80] font-semibold">
               Customise MOU Agreement Parties
@@ -363,6 +371,20 @@ export function SaccoNetworkPage() {
                 />
               </div>
               <div>
+                <label htmlFor="mou-members-count" className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">
+                  Number of SACCO Members
+                </label>
+                <input
+                  id="mou-members-count"
+                  type="number"
+                  min={1}
+                  value={mouDraft.membersCount}
+                  onChange={(e) => setMouDraft((prev) => ({ ...prev, membersCount: e.target.value }))}
+                  placeholder="e.g. 250"
+                  className="w-full h-9 px-3 text-xs font-mono rounded-lg bg-white dark:bg-[#0D1424] border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100"
+                />
+              </div>
+              <div>
                 <label htmlFor="mou-sign-person" className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">
                   SACCO Signing Representative Name
                 </label>
@@ -388,7 +410,7 @@ export function SaccoNetworkPage() {
                   className="w-full h-9 px-3 text-xs rounded-lg bg-white dark:bg-[#0D1424] border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100"
                 />
               </div>
-              <div>
+              <div className="sm:col-span-2 lg:col-span-3">
                 <label htmlFor="mou-gen-sec" className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">
                   JENGA TAIFA General Secretary
                 </label>
@@ -400,57 +422,6 @@ export function SaccoNetworkPage() {
                   className="w-full h-9 px-3 text-xs rounded-lg bg-white dark:bg-[#0D1424] border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100"
                 />
               </div>
-            </div>
-          </div>
-
-          {/* Printable Legal MOU Body */}
-          <div className="p-5 rounded-xl bg-slate-50 dark:bg-[#090F1C] border border-slate-200 dark:border-slate-800 space-y-2.5">
-            <div className="text-center font-display font-bold text-base uppercase">
-              THE REPUBLIC OF UGANDA · MEMORANDUM OF UNDERSTANDING
-            </div>
-            <p>
-              THIS MEMORANDUM OF UNDERSTANDING is made between{' '}
-              <strong>{PROGRAM_IDENTITY.implementingOrganization}</strong>, an organisation incorporated under the laws of
-              the Republic of Uganda (hereinafter referred to as <strong>&quot;JENGA TAIFA&quot;</strong>), and{' '}
-              <strong>{displaySaccoName}</strong> (Reg./Certificate No:{' '}
-              <strong className="font-mono">{displayRegNumber}</strong>, Address: <strong>{displayAddress}</strong>)
-              (hereinafter referred to as <strong>&quot;THE SACCO&quot;</strong>).
-            </p>
-          </div>
-
-          <div className="space-y-3.5">
-            {SACCO_MOU_CLAUSES.map((clause) => (
-              <div key={clause.number} className="space-y-1">
-                <div className="font-display font-bold text-slate-900 dark:text-slate-100">
-                  {clause.number}. {clause.title}
-                </div>
-                {clause.points.map((pt) => (
-                  <p key={pt} className="text-slate-700 dark:text-slate-300 pl-3">
-                    {pt}
-                  </p>
-                ))}
-              </div>
-            ))}
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-slate-200 dark:border-slate-800">
-            <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 space-y-2">
-              <div className="font-bold text-xs uppercase">
-                FOR &amp; ON BEHALF OF {PROGRAM_IDENTITY.implementingOrganization}
-              </div>
-              <div className="text-slate-600 dark:text-slate-400">Signature: ________________________</div>
-              <div className="text-slate-800 dark:text-slate-200">
-                Name / Title: <strong>{displayGenSec}</strong>, {PROGRAM_IDENTITY.generalSecretaryTitle}
-              </div>
-              <div className="text-slate-600 dark:text-slate-400">Date &amp; Official Seal: __________________</div>
-            </div>
-            <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 space-y-2">
-              <div className="font-bold text-xs uppercase">FOR &amp; ON BEHALF OF {displaySaccoName}</div>
-              <div className="text-slate-600 dark:text-slate-400">Signature: ________________________</div>
-              <div className="text-slate-800 dark:text-slate-200">
-                Authorized Signatory: <strong>{displaySignatory}</strong> ({displaySignatoryTitle})
-              </div>
-              <div className="text-slate-600 dark:text-slate-400">Date &amp; SACCO Stamp: __________________</div>
             </div>
           </div>
         </div>

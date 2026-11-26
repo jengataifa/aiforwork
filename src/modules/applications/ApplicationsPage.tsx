@@ -122,12 +122,12 @@ const BUSOGA_BUDGET_ITEMS = [
   },
   {
     item: 'Training Hall, Utilities & Daily Learner Meals',
-    spec: '50 cohort participants across 10 training days (tea & working lunch)',
+    spec: '100 cohort participants across 10 training days (tea & working lunch)',
     amountUgx: 4_500_000,
   },
   {
     item: 'Printed Prompt Guides, Workbooks & Certification',
-    spec: '50 participant handbooks, practical exercise sheets & official certificates',
+    spec: '100 participant handbooks, practical exercise sheets & official certificates',
     amountUgx: 1_500_000,
   },
   {
@@ -141,7 +141,7 @@ const BUSOGA_TOTAL_BUDGET_UGX = BUSOGA_BUDGET_ITEMS.reduce((sum, row) => sum + r
 
 const BUSOGA_EXPECTED_RESULTS = [
   {
-    metric: '50 Trained Community Participants',
+    metric: '100 Trained Community Participants',
     target: '100% hands-on completion across the 10-day Busoga practical AI curriculum',
   },
   {
@@ -368,7 +368,7 @@ export function ApplicationsPage() {
             </div>
             <div className="text-base font-semibold">
               Busoga Cohort Application Window is currently{' '}
-              <span className={admissionsOpen ? 'text-emerald-400' : 'text-amber-300'}>
+              <span className={admissionsOpen ? 'text-emerald-400' : 'text-[#ffd700]'}>
                 {admissionsOpen ? 'OPEN' : 'CLOSED'}
               </span>
             </div>
@@ -445,14 +445,14 @@ export function ApplicationsPage() {
                 <h2 className="font-display text-2xl sm:text-3xl font-bold text-slate-900 dark:text-slate-50">
                   BUSOGA AI FOR WORK &amp; BUSINESS
                 </h2>
-                <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 max-w-3xl leading-relaxed">
+                <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 max-w-3xl leading-relaxed text-justify">
                   A 10-day intensive holiday digital skilling and income-generation cohort empowering youth, students,
                   women, veterans’ families, and SACCO members across the Busoga sub-region.
                 </p>
               </div>
               <div className="flex flex-wrap gap-2 shrink-0">
                 <StatusBadge label="04th Jan 2027 – 15th Jan 2027" tone="info" />
-                <StatusBadge label="50 Participants" tone="success" />
+                <StatusBadge label="100 Participants" tone="success" />
               </div>
             </div>
 
@@ -485,7 +485,7 @@ export function ApplicationsPage() {
                   <Users className="w-4 h-4 text-emerald-600 dark:text-[#4ADE80]" />
                   <span>Initial Cohort Size</span>
                 </div>
-                <div className="text-base font-bold text-slate-900 dark:text-slate-100">50 Participants</div>
+                <div className="text-base font-bold text-slate-900 dark:text-slate-100">100 Participants</div>
                 <div className="text-sm text-slate-600 dark:text-slate-400">
                   Shared lab workstations provided; 50%+ women representation target
                 </div>
@@ -498,7 +498,7 @@ export function ApplicationsPage() {
                 <h3 className="font-display text-lg font-bold text-slate-900 dark:text-slate-100">
                   1. The Opportunity
                 </h3>
-                <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed">
+                <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed text-justify">
                   Thousands of talented youth, students, and small business owners in Busoga face limited exposure to
                   practical digital income tools. By using zero-cost AI workflows, participants can immediately sell
                   document typing, photo restoration, marketing design, online business setup, and agro-trade support
@@ -521,7 +521,9 @@ export function ApplicationsPage() {
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-[#4ADE80] shrink-0 mt-1" />
-                    <span>Members &amp; enterprise leads from JENGA TAIFA SACCOs in Iganga, Bugweri, Jinja, Mayuge, Namayingo &amp; Namutumba</span>
+                    <span>
+                      Members &amp; enterprise leads from JENGA TAIFA SACCOs in Iganga, Bugweri, Jinja, Mayuge, Namayingo &amp; Namutumba
+                    </span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-[#4ADE80] shrink-0 mt-1" />
@@ -638,12 +640,14 @@ export function ApplicationsPage() {
               />
 
               {!admissionsOpen ? (
-                <div className="p-6 rounded-xl bg-amber-50/70 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-700/40 text-center space-y-3">
-                  <Lock className="w-8 h-8 text-amber-600 dark:text-amber-400 mx-auto" />
+                <div className="p-6 rounded-xl bg-[#ffd700]/15 dark:bg-[#ffd700]/10 border border-[#ffd700]/75 dark:border-[#ffd700]/40 text-center space-y-3">
+                  <div className="w-11 h-11 rounded-full bg-[#ffd700] text-slate-950 flex items-center justify-center mx-auto">
+                    <Lock className="w-5 h-5" />
+                  </div>
                   <h4 className="font-display text-lg font-bold text-slate-900 dark:text-slate-100">
                     Cohort Admissions Are Currently Closed
                   </h4>
-                  <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed max-w-md mx-auto">
+                  <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed max-w-md mx-auto text-justify">
                     Intake opens ahead of scheduled school holiday sessions (next scheduled window:{' '}
                     <strong>Busoga Cohort · 04th Jan 2027 – 15th Jan 2027</strong>). You can prepare now by completing
                     the free self-paced <strong>Practical AI Course</strong> modules.
@@ -654,7 +658,7 @@ export function ApplicationsPage() {
                   <div className="text-base font-semibold text-slate-900 dark:text-slate-100">
                     Sign in to submit and track your cohort application
                   </div>
-                  <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                  <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed text-justify">
                     Signing in links your intake application securely to your personal account so coordinators can
                     confirm your SACCO seat and device support.
                   </p>
@@ -918,7 +922,7 @@ export function ApplicationsPage() {
             <h3 className="font-display text-lg font-bold text-slate-900 dark:text-slate-100">
               SACCO Leadership &amp; Enterprise Digital Readiness Pilot
             </h3>
-            <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+            <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed text-justify">
               Field engagement across 8 financed SACCOs in Kampala, Masaka, Iganga, Bugweri, Buvuma, and Nansana,
               validating digital bookkeeping, agricultural value-addition workflows, and cooperative reporting.
             </p>
@@ -935,7 +939,7 @@ export function ApplicationsPage() {
             <h3 className="font-display text-lg font-bold text-slate-900 dark:text-slate-100">
               Curriculum Blueprint &amp; Workstation Readiness Audit
             </h3>
-            <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+            <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed text-justify">
               Standardization of the 10-Day AI for Work &amp; Business curriculum, shared lab architecture, and
               holiday-cycle operations manual across 32 registered JENGA TAIFA cooperatives.
             </p>
@@ -979,7 +983,7 @@ export function ApplicationsPage() {
               </div>
               <h3 className="font-display text-lg font-bold text-slate-900 dark:text-slate-100">{coh.title}</h3>
               <div className="text-xs font-semibold text-emerald-700 dark:text-[#4ADE80]">{coh.target}</div>
-              <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">{coh.note}</p>
+              <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed text-justify">{coh.note}</p>
             </div>
           ))}
           {showBudget && (
@@ -987,7 +991,7 @@ export function ApplicationsPage() {
               <DollarSign className="w-5 h-5 text-emerald-600 dark:text-[#4ADE80] shrink-0" />
               <span>
                 Funding partners &amp; coordinators can scale additional regional cohorts directly using the{' '}
-                <strong>UGX 24,750,000</strong> standardized 50-learner Busoga cost model.
+                <strong>UGX 24,750,000</strong> standardized 100-learner Busoga cost model.
               </span>
             </div>
           )}

@@ -21,14 +21,14 @@ export function StatCard({
     accent === 'teal'
       ? 'text-teal-600 dark:text-[#2DD4BF]'
       : accent === 'amber'
-        ? 'text-amber-600 dark:text-amber-400'
+        ? 'text-slate-950 dark:text-[#ffd700]'
         : 'text-emerald-600 dark:text-[#4ADE80]';
 
   const accentBg =
     accent === 'teal'
       ? 'bg-teal-50 dark:bg-[#0F242A] border-teal-200 dark:border-[#2DD4BF]/25'
       : accent === 'amber'
-        ? 'bg-amber-50 dark:bg-amber-950/30 border-amber-200 dark:border-amber-500/25'
+        ? 'bg-[#ffd700] dark:bg-[#ffd700]/15 border-[#ffd700] dark:border-[#ffd700]/40'
         : 'bg-emerald-50 dark:bg-[#102022] border-emerald-200 dark:border-[#4ADE80]/25';
 
   const Wrapper = onClick ? 'button' : 'div';

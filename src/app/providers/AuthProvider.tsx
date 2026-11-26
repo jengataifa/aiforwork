@@ -267,7 +267,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       value={{
         user,
         profile,
-        isAuthenticated: Boolean(firebaseUser),
+        isAuthenticated: Boolean(firebaseUser && firebaseUser.emailVerified),
         isAdminUser,
         authLoading,
         authError,

@@ -66,8 +66,14 @@ export function ReportsPage() {
       ? collection(db, 'donations')
       : query(collection(db, 'donations'), where('ownerUid', '==', user.uid));
 
-    const certQ = collection(db, 'users', user.uid, 'certificates');
-    const progQ = collection(db, 'users', user.uid, 'courseProgress');
+    const certQ = query(
+      collection(db, 'users', user.uid, 'certificates'),
+      where('uid', '==', user.uid)
+    );
+    const progQ = query(
+      collection(db, 'users', user.uid, 'courseProgress'),
+      where('uid', '==', user.uid)
+    );
 
     const unsubApps = onSnapshot(
       appQ,
@@ -241,7 +247,7 @@ export function ReportsPage() {
                 75% Pass Score
               </div>
               <p className="text-xs text-slate-600 dark:text-slate-400">
-                Practical 8-scenario assessment required prior to automated A4 PDF certificate issuance.
+                Practical 8-scenario assessment required prior to automated official certificate issuance.
               </p>
             </div>
 
@@ -273,8 +279,8 @@ export function ReportsPage() {
                 <span className="font-bold text-slate-900 dark:text-slate-100">BUSOGA AI FOR WORK &amp; BUSINESS</span>
                 <StatusBadge label="04–15 Jan 2027" tone="info" />
               </div>
-              <p className="text-slate-600 dark:text-slate-300">
-                Initial 50-participant pilot cohort covering all 11 Busoga districts with shared workstations and 50%+ women representation.
+              <p className="text-slate-600 dark:text-slate-300 text-justify">
+                Initial 100-participant cohort covering all 11 Busoga districts with shared workstations and 50%+ women representation.
               </p>
             </div>
 

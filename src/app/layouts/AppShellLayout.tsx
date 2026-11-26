@@ -2,7 +2,6 @@ import { AlertCircle, BookOpen, Building2, Compass, Landmark, LayoutDashboard, X
 import React from 'react';
 import { useAuth } from '../../app/providers/AuthProvider';
 import { useNavigation } from '../../app/providers/NavigationProvider';
-import { OnboardingModal } from '../../components/feedback/OnboardingModal';
 import { ApplicationSidebar } from '../../components/navigation/ApplicationSidebar';
 import { Topbar } from '../../components/navigation/Topbar';
 import { ModuleRouteId } from '../../types/navigation';
@@ -48,7 +47,7 @@ export function AppShellLayout({ children }: { children: React.ReactNode }) {
           </div>
         )}
 
-        <main className="flex-1 px-4 sm:px-6 lg:px-8 py-5 sm:py-7 max-w-[1440px] w-full mx-auto">
+        <main className="flex-1 px-4 sm:px-6 lg:px-8 py-4 sm:py-6 max-w-[1440px] w-full mx-auto">
           {children}
         </main>
       </div>
@@ -78,8 +77,6 @@ export function AppShellLayout({ children }: { children: React.ReactNode }) {
           );
         })}
       </nav>
-
-      <OnboardingModal />
     </div>
   );
 }
